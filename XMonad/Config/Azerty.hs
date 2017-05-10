@@ -59,3 +59,10 @@ azertyKeys_ topRow conf@(XConfig {modMask = modm}) = M.fromList $
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
         | (key, sc) <- zip [xK_z, xK_e, xK_r] [0..],
           (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+
+belgianKeys = topRow <+> azertyKeys
+    where
+        topRow conf@(XConfig {modMask = modm}) = M.fromList $
+            [((m .|. modm, k), windows $ f i)
+                | (i, k) <- zip (workspaces conf) [0x26,0xe9,0x22,0x27,0x28,0xa7,0xe8,0x21,0xe7,0xe0],
+                  (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
