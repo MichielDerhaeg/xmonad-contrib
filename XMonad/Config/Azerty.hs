@@ -40,11 +40,18 @@ import qualified Data.Map as M
 
 azertyConfig = def { keys = azertyKeys <+> keys def }
 
-azertyKeys conf@(XConfig {modMask = modm}) = M.fromList $
+frenchTopRow = [0x26,0xe9,0x22,0x27,0x28,0x2d,0xe8,0x5f,0xe7,0xe0]
+belgianTopRow = [0x26,0xe9,0x22,0x27,0x28,0xa7,0xe8,0x21,0xe7,0xe0]
+
+azertyKeys = azertyKeys_ frenchTopRow
+
+belgianKeys = azertyKeys_ belgianTopRow
+
+azertyKeys_ topRow conf@(XConfig {modMask = modm}) = M.fromList $
     [((modm, xK_semicolon), sendMessage (IncMasterN (-1)))]
     ++
     [((m .|. modm, k), windows $ f i)
-        | (i, k) <- zip (workspaces conf) [0x26,0xe9,0x22,0x27,0x28,0x2d,0xe8,0x5f,0xe7,0xe0],
+        | (i, k) <- zip (workspaces conf) topRow,
           (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     ++
     -- mod-{z,e,r} %! Switch to physical/Xinerama screens 1, 2, or 3
@@ -52,10 +59,3 @@ azertyKeys conf@(XConfig {modMask = modm}) = M.fromList $
     [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
         | (key, sc) <- zip [xK_z, xK_e, xK_r] [0..],
           (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-
-belgianKeys = topRow <+> azertyKeys
-    where
-        topRow conf@(XConfig {modMask = modm}) = M.fromList $
-            [((m .|. modm, k), windows $ f i)
-                | (i, k) <- zip (workspaces conf) [0x26,0xe9,0x22,0x27,0x28,0xa7,0xe8,0x21,0xe7,0xe0],
-                  (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
