@@ -17,7 +17,7 @@
 module XMonad.Config.Azerty (
     -- * Usage
     -- $usage
-    azertyConfig, azertyKeys, belgianKeys
+    azertyConfig, belgianConfig, azertyKeys, belgianKeys
     ) where
 
 import XMonad
@@ -39,6 +39,8 @@ import qualified Data.Map as M
 -- > main = xmonad someConfig { keys = \c -> azertyKeys c <+> keys someConfig c }
 
 azertyConfig = def { keys = azertyKeys <+> keys def }
+
+belgianConfig = def { keys = belgianKeys <+> keys def }
 
 azertyKeys = azertyKeysTop [0x26,0xe9,0x22,0x27,0x28,0x2d,0xe8,0x5f,0xe7,0xe0]
 
